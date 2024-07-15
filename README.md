@@ -25,7 +25,7 @@ Lua script for YimMenu that adds a few fun features for car enthusiasts.
  - Simply makes your vehicle's radio sound louder from the outside. You will only notice a difference when you stand next to your car while the radio is on.
 
 #### Pops & Bangs:
- - Adds a crackle tune to your vehicle. Whenever you let go of the accelerator at high RPM, your exhaust will start backfiring and popping, [similar to this](https://www.youtube.com/watch?v=9ze48QRQGmQ). When this option is enabled, another checkbox will appear allowing you to make your pops sound much louder (like gunshots).
+ - Adds a crackle tune to your vehicle. Whenever you let go of the accelerator at high RPM, your exhaust will start backfiring and popping, [similar to this](https://www.youtube.com/watch?v=Kn7rdsFjtok). When this option is enabled, another checkbox will appear allowing you to make your pops sound much louder (like gunshots).
 
 #### High Beams On Horn:
  - Flash your high beams whenever you use your horn.
