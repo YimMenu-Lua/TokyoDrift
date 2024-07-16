@@ -6,6 +6,8 @@ vf?        48 85 C0 74 3C 8B 80 00 00 00 00 C1 E8 0F
 ]]
 
 tokyodrift = gui.get_tab("GUI_TAB_VEHICLE"):add_tab("Tokyo Drift")
+local popsnd, sndRef
+local flame_size
 local driftMode          = false
 local DriftTires         = false
 local is_car             = false
@@ -26,6 +28,7 @@ local nos_started        = false
 local twostep_started    = false
 local is_typing          = false
 local loud_radio         = false
+local louderPops         = false
 local open_sounds_window = false
 local started_lct        = false
 local launch_active      = false
@@ -275,6 +278,13 @@ vehicle_name = vehicles.get_vehicle_display_name(ENTITY.GET_ENTITY_MODEL(current
         if popsNbangs then
             ImGui.SameLine();ImGui.Dummy(37, 1);ImGui.SameLine();louderPops, _ = ImGui.Checkbox("Louder Pops", louderPops, true)
             widgetToolTip(false, "Makes your pops & bangs sound extremely loud.")
+            if not louderPops then
+                popsnd, sndRef = "BOOT_POP", "DLC_VW_BODY_DISPOSAL_SOUNDS"
+                flame_size = 0.42069
+            else
+                popsnd, sndRef = "SNIPER_FIRE", "DLC_BIKER_RESUPPLY_MEET_CONTACT_SOUNDS"
+                flame_size = 1.5
+            end
         end
 
         hornLight, _ = ImGui.Checkbox("High Beams on Horn", hornLight, true)
@@ -446,11 +456,11 @@ script.register_looped("game input", function()
             end
         end
         if speedBoost and PAD.IS_CONTROL_PRESSED(0, 71) then
-            if validModel or is_boat then
-                PAD.DISABLE_CONTROL_ACTION(0, tdBtn, true) -- prevent face planting when using NOS mid-air
-            end
-            if is_bike then
-                PAD.DISABLE_CONTROL_ACTION(0, 281, true)
+            if validModel or is_boat or is_bike then
+            -- prevent face planting when using NOS mid-air
+                PAD.DISABLE_CONTROL_ACTION(0, 60, true)
+                PAD.DISABLE_CONTROL_ACTION(0, 61, true)
+                PAD.DISABLE_CONTROL_ACTION(0, 62, true)
             end
         end
         if holdF then
@@ -741,6 +751,7 @@ script.register_looped("2-step", function(twostep)
                                     GRAPHICS.REMOVE_PARTICLE_FX(bfire)
                                 end
                             end
+                            twostep_started = false
                         end
                     end
                 end
@@ -777,12 +788,6 @@ script.register_looped("LCTRL SFX", function(tstp)
         end
 
         if popsNbangs then
-            local popsnd, sndRef
-            if not louderPops then
-                popsnd, sndRef = "BOOT_POP", "DLC_VW_BODY_DISPOSAL_SOUNDS"
-            else
-                popsnd, sndRef = "SNIPER_FIRE", "DLC_BIKER_RESUPPLY_MEET_CONTACT_SOUNDS"
-            end
             if VEHICLE.IS_VEHICLE_STOPPED(current_vehicle) then
                 rpmThreshold = 0.45
             else
@@ -817,17 +822,11 @@ script.register_looped("pops&bangs", function(pnb)
     if isDriving() and VEHICLE.GET_IS_VEHICLE_ENGINE_RUNNING(current_vehicle) then
         if is_car or is_bike or is_quad then
             if popsNbangs then
-                local flame_size
                 local counter = 0
                 local asset   = "core"
                 local currRPM = VEHICLE.GET_VEHICLE_CURRENT_REV_RATIO_(current_vehicle)
                 local _, _,_, currentVehPtr = onVehEnter()
                 local currGear = currentVehPtr:add(vehOffsets.cg):get_byte()
-                if not louderPops then
-                    flame_size = 0.42069
-                else
-                    flame_size = 1.5
-                end
                 if VEHICLE.IS_VEHICLE_STOPPED(current_vehicle) then
                     rpmThreshold = 0.45
                 else
