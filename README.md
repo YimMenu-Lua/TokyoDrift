@@ -25,7 +25,11 @@ Lua script for YimMenu that adds a few fun features for car enthusiasts.
  - Simply makes your vehicle's radio sound louder from the outside. You will only notice a difference when you stand next to your car while the radio is on.
 
 #### Pops & Bangs:
- - Adds a crackle tune to your vehicle. Whenever you let go of the accelerator at high RPM, your exhaust will start backfiring and popping, [similar to this](https://www.youtube.com/watch?v=Kn7rdsFjtok). When this option is enabled, another checkbox will appear allowing you to make your pops sound much louder (like gunshots).
+ - Adds a crackle tune to your vehicle. Whenever you let go of the accelerator at high RPM, your exhaust will start backfiring and popping, [similar to this](https://www.youtube.com/watch?v=Kn7rdsFjtok).
+   
+   When this option is enabled, another checkbox will appear allowing you to make your pops sound much louder (like gunshots). [**In-game example**](https://github.com/user-attachments/assets/75b99421-bc4c-4907-998b-ede9279f3196).
+
+
 
 #### High Beams On Horn:
  - Flash your high beams whenever you use your horn.
@@ -43,7 +47,7 @@ Lua script for YimMenu that adds a few fun features for car enthusiasts.
  - Starts an RGB loop on your headlights.
 
 #### Change Engine Sound:
- - Only works for land vehicles: This opens a new window providing you with a list of all vehicles, choose one and press the button to use that model's sound. (This is only local, other players will still hear the default vehicle sound).
+ - Only works on land vehicles: This opens a new window providing you with a list of all vehicles, choose one and press the button to use that model's sound. (This is only local, other players will still hear the default vehicle sound).
 
 #### Destroy/Fix Engine:
  This button switches labels and functionalities depending on your vehicle's engine health:
@@ -53,4 +57,4 @@ Lua script for YimMenu that adds a few fun features for car enthusiasts.
 ## Credits:
 
 - [Harmless](https://github.com/harmless05) for the drift feature (Shift-Drift).
-- [xiaoxiao](https://github.com/xiaoxiao921) for helping figure out an issue with exhaust bones (it wasn'ty really an issue, I was just confused).
+- [xiaoxiao](https://github.com/xiaoxiao921) for helping figure out an issue with exhaust bones (it wasn't really an issue, I was just confused).
