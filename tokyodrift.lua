@@ -464,7 +464,7 @@ script.register_looped("game input", function()
             end
         end
         if holdF then
-            if isDriving() then
+            if isDriving() and not is_typing then
                 PAD.DISABLE_CONTROL_ACTION(0, 75, true)
             else
                 timerB = 0
@@ -793,9 +793,8 @@ script.register_looped("LCTRL SFX", function(tstp)
             else
                 rpmThreshold = 0.69
             end
-            local currRPM = VEHICLE.GET_VEHICLE_CURRENT_REV_RATIO_(current_vehicle)
-            local _, _,_, currentVehPtr = onVehEnter()
-            local currGear = currentVehPtr:add(vehOffsets.cg):get_byte()
+            local currRPM  = VEHICLE.GET_VEHICLE_CURRENT_REV_RATIO_(current_vehicle)
+            local currGear = VEHICLE.GET_VEHICLE_CURRENT_DRIVE_GEAR_(current_vehicle)
             if PAD.IS_CONTROL_RELEASED(0, 71) and currRPM < 1.0 and currRPM > rpmThreshold and currGear ~= 0 then
                 local popSound2
                 local randStime = math.random(60, 200)
@@ -822,11 +821,10 @@ script.register_looped("pops&bangs", function(pnb)
     if isDriving() and VEHICLE.GET_IS_VEHICLE_ENGINE_RUNNING(current_vehicle) then
         if is_car or is_bike or is_quad then
             if popsNbangs then
-                local counter = 0
-                local asset   = "core"
-                local currRPM = VEHICLE.GET_VEHICLE_CURRENT_REV_RATIO_(current_vehicle)
-                local _, _,_, currentVehPtr = onVehEnter()
-                local currGear = currentVehPtr:add(vehOffsets.cg):get_byte()
+                local counter  = 0
+                local asset    = "core"
+                local currRPM  = VEHICLE.GET_VEHICLE_CURRENT_REV_RATIO_(current_vehicle)
+                local currGear = VEHICLE.GET_VEHICLE_CURRENT_DRIVE_GEAR_(current_vehicle)
                 if VEHICLE.IS_VEHICLE_STOPPED(current_vehicle) then
                     rpmThreshold = 0.45
                 else
