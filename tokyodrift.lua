@@ -38,6 +38,7 @@ local defaultXenon       = 0
 local DriftIntensity     = 0
 local vehSound_index     = 0
 local lightSpeed         = 1
+local DriftPowerIncrease = 1
 local tdBtn              = 21
 local search_term        = ""
 local nosptfx_t          = {}
@@ -261,39 +262,32 @@ tokyodrift:add_imgui(function()
   if PED.IS_PED_IN_ANY_VEHICLE(self.get_ped(), true) then
     if validModel then
       ImGui.Text("Vehicle: " .. mfr_name .. " " .. vehicle_name)
-      ImGui.Spacing()
-      driftMode, _ = ImGui.Checkbox("Activate Drift Mode", driftMode, true)
+
+      ImGui.Spacing(); driftMode, _ = ImGui.Checkbox("Activate Drift Mode", driftMode, true)
       helpmarker(false, "This will make your car lose grip. Hold [Left Shift] to drift")
       if driftMode then
         DriftTires = false
-        ImGui.Spacing()
-        ImGui.Text("Intensity:")
-        ImGui.PushItemWidth(250)
+        ImGui.SameLine()
+        ImGui.PushItemWidth(160)
         DriftIntensity, _ = ImGui.SliderInt("##Intensity", DriftIntensity, 0, 3)
-        widgetToolTip(false, "0: No Grip (very stiff).\n1: Balanced (Recommended).\n2: Weak Drift.\n3: Weakest Drift.")
         ImGui.PopItemWidth()
+        widgetToolTip(false, "0: No Grip (very stiff).\n1: Balanced (Recommended).\n2: Weak Drift.\n3: Weakest Drift.")
       end
+
       DriftTires, _ = ImGui.Checkbox("Equip Drift Tires", DriftTires, true)
       helpmarker(false,
         "This will equip your car with drift tires whenver you press [Left Shift]. Your tires will be reset when you release the button.")
       if DriftTires then
         driftMode = false
       end
-      -- ImGui.Separator();ImGui.Text("¤ Stancer ¤");ImGui.Spacing()
-      -- ImGui.Indent()
-      -- ImGui.PushItemWidth(180)
-      -- ImGui.Text("Front Camber: ");ImGui.SameLine();fCamber, fCamberUsed = ImGui.SliderFloat("##frontcamber", fCamber, -0.50, 0.50)
-      -- ImGui.Text("Rear Camber:  ");ImGui.SameLine();rCamber, rCamberUsed = ImGui.SliderFloat("##rearcamber", rCamber, -0.50, 0.50)
-      -- ImGui.PopItemWidth()
-      -- ImGui.Unindent()
-      -- if fCamberUsed then
-      --     _, _,_, currentVehPtr = onVehEnter()
-      --     currentVehPtr:add(vehOffsets.fc):set_float(fCamber)
-      -- end
-      -- if rCamberUsed then
-      --     _, _,_, currentVehPtr = onVehEnter()
-      --     currentVehPtr:add(vehOffsets.rc):set_float(rCamber)
-      -- end
+
+      if driftMode or DriftTires then
+        ImGui.SameLine(); ImGui.Dummy(10, 1); ImGui.SameLine()
+        ImGui.PushItemWidth(160)
+        DriftPowerIncrease, _ = ImGui.SliderInt("Torque", DriftPowerIncrease, 1, 100); ImGui.PopItemWidth()
+        widgetToolTip(false, "Increases you vehicle's toruqe when drifting. Works for both 'Drift Mode' and 'Drift Tires'.")
+      end
+
       ImGui.Spacing(); ImGui.Text(
       "TIP: You can not use both options together.\10Choose one of the two. Experiment and find the\10style that suits you.")
     else
@@ -556,7 +550,7 @@ script.register_looped("TDFT", function(script)
     end
     if validModel and DriftTires and PAD.IS_CONTROL_PRESSED(0, tdBtn) then
       VEHICLE.SET_DRIFT_TYRES(current_vehicle, true)
-      VEHICLE.SET_VEHICLE_CHEAT_POWER_INCREASE(current_vehicle, 100.0)
+      VEHICLE.SET_VEHICLE_CHEAT_POWER_INCREASE(current_vehicle, DriftPowerIncrease)
     else
       VEHICLE.SET_DRIFT_TYRES(current_vehicle, false)
       VEHICLE.SET_VEHICLE_CHEAT_POWER_INCREASE(current_vehicle, 1.0)
@@ -565,7 +559,7 @@ script.register_looped("TDFT", function(script)
     if validModel and driftMode and PAD.IS_CONTROL_PRESSED(0, tdBtn) and not DriftTires then
       VEHICLE.SET_VEHICLE_REDUCE_GRIP(current_vehicle, true)
       VEHICLE.SET_VEHICLE_REDUCE_GRIP_LEVEL(current_vehicle, DriftIntensity)
-      VEHICLE.SET_VEHICLE_CHEAT_POWER_INCREASE(current_vehicle, 100.0)
+      VEHICLE.SET_VEHICLE_CHEAT_POWER_INCREASE(current_vehicle, DriftPowerIncrease)
     else
       VEHICLE.SET_VEHICLE_REDUCE_GRIP(current_vehicle, false)
       VEHICLE.SET_VEHICLE_CHEAT_POWER_INCREASE(current_vehicle, 1.0)
